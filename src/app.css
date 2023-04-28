@@ -1,0 +1,21 @@
+@import url("./fonts.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html, #__next{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+  
+@layer base{
+    h1, h2, h3, h4, h5, h6, p, a, span, li, button, input, textarea{
+    @apply font-nougat text-white;
+    text-stroke: 2px black;
+    -webkit-text-stroke: 1px #000000;
+    text-shadow: #000000 0px 4px;
+    }
+}
