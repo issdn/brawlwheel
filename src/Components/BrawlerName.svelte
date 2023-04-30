@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import wheel from '../Stores/wheelStore';
+	import { isAnimating } from '../Stores/pageContextStore';
 
 	type name = string;
 	type addBrawler = (name: string) => void;
 	type removeBrawler = (name: string) => void;
-
-	let isAnimating = false;
-	wheel.subscribeIsAnimating((_isAnimating) => (isAnimating = _isAnimating));
 
 	export let name: name;
 	export let addBrawler: addBrawler;
@@ -18,7 +15,7 @@
 	let active = true;
 
 	const handleBrawlerNameClick = () => {
-		if (isAnimating) return;
+		if ($isAnimating) return;
 		if (active) {
 			try {
 				removeBrawler(name);
@@ -37,8 +34,9 @@
 </script>
 
 <button
-	class={`${isAnimating && 'cursor-default'} ${
-		!active ? 'opacity-25' : isAnimating ? 'opacity-75' : 'opacity-100'
+	disabled={$isAnimating}
+	class={`${$isAnimating && 'cursor-default'} ${
+		!active ? 'opacity-25' : $isAnimating ? 'opacity-75' : 'opacity-100'
 	}`}
 	bind:this={textWidthBinding}
 	on:click={handleBrawlerNameClick}>{name}</button

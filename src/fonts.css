@@ -1,7 +1,7 @@
 @font-face {
-    font-family: 'Nougat';
-    src: url('/fonts/Nougat-ExtraBlack.woff2') format('woff2'),
-    url('/fonts/Nougat-ExtraBlack.woff') format('woff');
+    font-family: 'Lilita';
+    src: url('/fonts/LilitaOne.woff2') format('woff2'),
+    url('/fonts/LilitaOne.woff') format('woff');
     font-weight: 900;
     font-style: normal;
     font-display: swap;

@@ -25,7 +25,7 @@ const configBase = {
 	segmentColors: ['#ff9801', '#ffcc01'],
 	textColor: 'white',
 	textBorderColor: 'black',
-	fontFamily: 'Nougat',
+	fontFamily: 'Lilita',
 	accentColor: 'black',
 	duration: 5000,
 	fontBorderWidth: 1,
@@ -93,6 +93,7 @@ export default class WheelRenderer {
 	}
 
 	public spin() {
+		if (this._words.length <= 0) return;
 		this.config.onAnimationStart();
 		const winnerIndex = this.calculateWinnerIndex();
 		this.setWinningAngle(winnerIndex);
@@ -247,9 +248,18 @@ export default class WheelRenderer {
 		this.ctx.translate(-this.centerX, -this.centerY);
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-		this._words.forEach((word, i) => {
-			this.drawSegment(word, i);
-		});
+		if (this._words.length <= 0) {
+			this.ctx.beginPath();
+			this.ctx.moveTo(this.centerX, this.centerY);
+			this.ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
+			this.ctx.closePath();
+			this.ctx.fillStyle = this.config.segmentColors[0];
+			this.ctx.fill();
+		} else {
+			this._words.forEach((word, i) => {
+				this.drawSegment(word, i);
+			});
+		}
 
 		this.ctx.restore();
 		this.drawInnerCircle();

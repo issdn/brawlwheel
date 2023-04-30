@@ -15,17 +15,16 @@ body, html, #__next{
 }
   
 @layer base{
-    h1, h2, h3, h4, h5, h6, p, a, span, li, button, input, textarea{
-    @apply font-nougat text-white;
+    h1, h2, h3, h4, h5, h6, p, a, span, li, button, input, label, textarea{
+    @apply font-lilita text-white text-shadow-md;
     text-stroke: 2px black;
     -webkit-text-stroke: 1px #000000;
-    text-shadow: #000000 0px 4px;
     }
 }
 
 @layer components{
     .default-text{
-        @apply font-nougat text-white;
+        @apply font-lilita text-white;
         text-stroke: unset;
         -webkit-text-stroke: unset;
         text-shadow: unset;
@@ -38,5 +37,17 @@ body, html, #__next{
     }
     .close-button-border{
         clip-path: polygon(30% 0%, 0% 30%, 15% 50%,0% 70%, 35% 100%, 50% 85%,75% 100%, 100% 70%, 85% 50%, 100% 30%,  70% 0%, 50% 20%);
+    }
+    .clip-checkbox{
+        clip-path: polygon(65% 10%, 95% 25%, 55% 90%, 5% 60%, 20% 35%, 45% 50%);
+    }
+    .text-shadow-sm{
+        text-shadow: #000000 0px 2px;
+    }
+    .text-shadow-md{
+        text-shadow: #000000 0px 4px;
+    }
+    .text-shadow-lg{
+        text-shadow: #000000 0px 6px;
     }
 }

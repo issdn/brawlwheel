@@ -4,7 +4,7 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				nougat: ['Nougat', 'sans-serif']
+				lilita: ['Lilita One', 'sans-serif']
 			},
 			colors: {
 				'brawl-purple': '#7a03db',
@@ -16,7 +16,10 @@ export default {
 			backgroundImage: {
 				'secondary-gradient':
 					'radial-gradient(circle at top right, transparent 0%, transparent 75%, #7a03db 75%, #7a03db 100%), linear-gradient(to bottom right, #7a03db 0%, #af14ec 100%)',
-				'yellow-gradient': ''
+				'checkbox-gradient':
+					'radial-gradient(ellipse at center, rgb(38 , 38 , 38 ), rgb(82, 82, 82) 90%)',
+				'checkbox-gradient-checked':
+					'radial-gradient(ellipse at center, rgb(249, 115, 22 ), rgb(234, 88, 12) 90%)'
 			},
 			dropShadow: {
 				brawl: '#000000 0px 4px'

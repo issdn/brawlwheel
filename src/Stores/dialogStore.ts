@@ -1,9 +1,20 @@
 import { writable } from 'svelte/store';
 
-const createStore = () => {
-	const { subscribe, set } = writable<string | null>(null);
+export type WheelWinner = {
+	name: string;
+	gadget?: string;
+	starPower?: string;
+};
 
-	const addDialog = (content: string) => {
+type DialogTypes = {
+	type: 'wheelWinner';
+	data: WheelWinner;
+};
+
+const createStore = () => {
+	const { subscribe, set } = writable<DialogTypes | null>(null);
+
+	const addDialog = (content: DialogTypes) => {
 		set(content);
 	};
 
@@ -18,5 +29,4 @@ const createStore = () => {
 	};
 };
 
-const dialogContext = createStore();
-export default dialogContext;
+export const dialogContext = createStore();
