@@ -6,7 +6,7 @@
 </script>
 
 <div
-	class="bg-brawl-yellow py-4 px-8 flex flex-col gap-y-4 border-2 border-black drop-shadow-brawl box-border"
+	class="bg-yellow-gradient py-4 px-8 flex flex-col gap-y-4 border-2 border-black drop-shadow-brawl box-border"
 	use:clickOutside
 	on:clickoutside={onClose}
 >

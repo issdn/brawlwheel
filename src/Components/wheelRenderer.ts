@@ -1,5 +1,4 @@
 type Config = {
-	padding: number;
 	fontWeight: number;
 	segmentColors: string[];
 	textColor: string;
@@ -20,7 +19,6 @@ export type ConfigType = Partial<{
 }>;
 
 const configBase = {
-	padding: 10,
 	fontWeight: 900,
 	segmentColors: ['#ff9801', '#ffcc01'],
 	textColor: 'white',
@@ -61,7 +59,7 @@ export default class WheelRenderer {
 		this.numSegments = this._words.length;
 		this.centerX = this.canvas.width / 2;
 		this.centerY = this.canvas.height / 2;
-		this.radius = Math.min(this.centerX, this.centerY) - this.config.padding;
+		this.radius = Math.min(this.centerX, this.centerY);
 		this.fontStyle = `${this.config.fontWeight} ${24}px ${this.config.fontFamily}`;
 		this.config.fontBorderWidth = 1;
 		this.config.accentBorderWidth = 1;
@@ -112,20 +110,26 @@ export default class WheelRenderer {
 	private calculateSizing() {
 		const container = document.getElementById('wheelCanvasContainer') as HTMLDivElement;
 		if (!container) {
-			throw new Error('Could not get canvas container');
+			throw new Error(
+				'Could not get canvas container. Make sure you have a div with id="wheelCanvasContainer"'
+			);
 		}
-		const containerSize = container.offsetWidth;
-		const windowSize = window.innerWidth;
-		if (container.offsetHeight > window.innerHeight) {
-			this.canvas.width = this.canvas.height =
-				Math.min(windowSize, windowSize) - this.config.padding * 2;
-		} else {
-			this.canvas.width = this.canvas.height =
-				Math.min(containerSize, containerSize) - this.config.padding * 2;
+		const containerWidth = container.offsetWidth;
+		const containerHeight = container.offsetHeight;
+		let size = Math.min(containerWidth, containerHeight);
+		if (size <= 0) {
+			size = Math.max(containerWidth, containerHeight);
+			container.style.height = container.style.width = size + 'px';
+			if (size <= 0) {
+				size = Math.min(window.innerHeight, window.innerWidth);
+				container.style.height = size + 'px';
+				container.style.width = size + 'px';
+			}
 		}
+		this.canvas.width = this.canvas.height = size;
 		this.centerX = this.canvas.width / 2;
 		this.centerY = this.canvas.height / 2;
-		this.radius = Math.min(this.centerX, this.centerY) - this.config.padding;
+		this.radius = Math.min(this.centerX, this.centerY);
 		this.angleStep = (2 * Math.PI) / this.numSegments;
 		this.fontStyle = `${this.config.fontWeight} ${
 			this._words.length < 24 ? (this.radius / 24) * 2.5 : (this.radius / this._words.length) * 3

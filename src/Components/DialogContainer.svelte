@@ -10,7 +10,7 @@
 
 <div class="absolute top-0 left-0 h-screen w-screen pointer-events-none overflow-x-hidden">
 	{#if $dialogContext}
-		<div class="h-full w-full pointer-events-auto">
+		<div class="h-full w-full pointer-events-auto z-[9999] relative">
 			<div
 				class="h-full w-full bg-black/50 py-4 px-8 gap-y-2 flex flex-col justify-center items-center"
 			>

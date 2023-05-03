@@ -2,8 +2,8 @@ import { writable } from 'svelte/store';
 
 export type WheelWinner = {
 	name: string;
-	gadget?: string;
-	starPower?: string;
+	gadget: string | null;
+	starPower: string | null;
 };
 
 type DialogTypes = {

@@ -31,12 +31,42 @@ const createBrawlerStore = (brawlerNames: BrawlerNames = []) => {
 
 export const brawlerStore = createBrawlerStore();
 
-export type GadgetsByBrawler = {
-	[k: string]: string[];
+export type GadgetsAndStarPowersByBrawler = {
+	name: string;
+	gadgets: string[];
+	starPowers: string[];
 };
-export const gadgetsByBrawler = writable<GadgetsByBrawler>();
 
-export type StarpowersByBrawler = {
-	[k: string]: string[];
+export type GadgetsAndStarPowersByBrawlers = GadgetsAndStarPowersByBrawler[];
+
+const createGadgetsAndStarPowersByBrawlerStore = () => {
+	const { subscribe, set, update } = writable<GadgetsAndStarPowersByBrawlers>();
+
+	let _brawlersList: GadgetsAndStarPowersByBrawlers;
+	const getRandomGadgetAndStarPower = (
+		brawlerName: string,
+		gadget: boolean,
+		starPower: boolean
+	) => {
+		type BrawlerObj = { gadget: string | null; starPower: string | null; name: string };
+		subscribe((newBrawlersList) => (_brawlersList = newBrawlersList));
+		const brawler = _brawlersList.find((brawler) => brawler.name === brawlerName);
+		if (!brawler) return { name: brawlerName, gadget: null, starPower: null };
+		let brawlerObj: BrawlerObj = { name: brawlerName } as BrawlerObj;
+		const randomGadget = brawler.gadgets[Math.floor(Math.random() * brawler.gadgets.length)];
+		const randomStarPower =
+			brawler.starPowers[Math.floor(Math.random() * brawler.starPowers.length)];
+		brawlerObj = { ...brawlerObj, gadget: gadget ? randomGadget : null };
+		brawlerObj = { ...brawlerObj, starPower: starPower ? randomStarPower : null };
+		return brawlerObj;
+	};
+
+	return {
+		subscribe,
+		set,
+		update,
+		getRandomGadgetAndStarPower
+	};
 };
-export const starpowersByBrawler = writable<StarpowersByBrawler>();
+
+export const gadgetsAndStarPowersByBrawler = createGadgetsAndStarPowersByBrawlerStore();

@@ -1,4 +1,4 @@
-type Brawler = {
+export type Brawler = {
 	name: string;
 	id: number;
 	starPowers: {
@@ -10,6 +10,6 @@ type Brawler = {
 		id: number;
 	}[];
 };
-type Brawlers = Brawler[];
+export type Brawlers = Brawler[];
 
 export const getBrawlerNames = (brawlers: Brawlers) => brawlers.map((brawler) => brawler.name);
