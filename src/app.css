@@ -13,26 +13,18 @@ body, html, body > div{
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden
 }
+
+body, button{
+    @apply text-shadow-sm
+	md:text-shadow-md
+	text-sm
+	sm:text-base
+	md:text-lg
+	lg:text-xl;
+}
   
 * {
     box-sizing: border-box;
-}
-
-@layer base{
-    h1, h2, h3, h4, h5, h6, p, a, span, li, button, input, label, textarea{
-    @apply font-lilita text-white text-shadow-md;
-    text-stroke: 2px black;
-    -webkit-text-stroke: 1px #000000;
-    }
-}
-
-@layer components{
-    .default-text{
-        @apply font-lilita text-white;
-        text-stroke: unset;
-        -webkit-text-stroke: unset;
-        text-shadow: unset;
-    }
 }
 
 @layer utilities{
@@ -49,10 +41,7 @@ body, html, body > div{
         text-shadow: #000000 0px 2px;
     }
     .text-shadow-md{
-        text-shadow: #000000 0px 4px;
-    }
-    .text-shadow-lg{
-        text-shadow: #000000 0px 6px;
+        text-shadow: #000000 0px 3px;
     }
     .clip-button{
         clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);

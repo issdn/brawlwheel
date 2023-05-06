@@ -8,7 +8,9 @@
 	};
 </script>
 
-<div class="absolute top-0 left-0 h-screen w-screen pointer-events-none overflow-x-hidden">
+<div
+	class="font-lilita text-white absolute top-0 left-0 h-screen w-screen pointer-events-none overflow-x-hidden"
+>
 	{#if $dialogContext}
 		<div class="h-full w-full pointer-events-auto z-[9999] relative">
 			<div

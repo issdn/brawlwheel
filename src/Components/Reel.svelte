@@ -29,8 +29,8 @@
 	$: if (winner) {
 		const { gadget, starPower } = gadgetsAndStarPowersByBrawler.getRandomGadgetAndStarPower(
 			winner,
-			$settings.withGadgets,
-			$settings.withStarPowers
+			$settings.withGadgets.checked,
+			$settings.withStarPowers.checked
 		);
 		randomGadget = gadget;
 		randomStarPower = starPower;
@@ -61,22 +61,22 @@
 	});
 </script>
 
-<div class="relative min-h-[5.50rem] flex flex-col">
+<div class="relative min-h-[5.80rem] flex flex-col">
 	{#if possibilities}
 		{#key current}
-			<span class="text-xl md:text-3xl" in:slide out:slide|local>
+			<span class="md:text-3xl uppercase" in:slide out:slide|local>
 				{possibilities[current]}
 			</span>
 		{/key}
 	{/if}
 	{#if winner}
 		{#if randomGadget}
-			<span in:slide={{ delay: time }} out:slide|local class="text-sm md:text-xl">
+			<span in:slide={{ delay: time }} out:slide|local class="md:text-xl">
 				{randomGadget}
 			</span>
 		{/if}
 		{#if randomStarPower}
-			<span in:slide={{ delay: time }} out:slide|local class="text-sm md:text-xl">
+			<span in:slide={{ delay: time }} out:slide|local class="md:text-xl">
 				{randomStarPower}
 			</span>
 		{/if}

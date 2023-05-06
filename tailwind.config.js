@@ -21,7 +21,7 @@ export default {
 				'checkbox-gradient':
 					'radial-gradient(ellipse at center, rgb(38 , 38 , 38 ), rgb(82, 82, 82) 90%)',
 				'checkbox-gradient-checked':
-					'radial-gradient(ellipse at center, rgb(249, 115, 22 ), rgb(234, 88, 12) 90%)'
+					'radial-gradient(ellipse at center, rgb(251,146,60), rgb(249,115,22 ) 90%)'
 			},
 			dropShadow: {
 				brawl: '#000000 0px 4px'

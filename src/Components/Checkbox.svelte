@@ -17,16 +17,18 @@
 		toggle();
 	}}
 	on:keypress={(e) => {
-		if (e.key === 'Space') {
-			e.preventDefault();
+		if (e.key === ' ') {
 			toggle();
 		}
 	}}
-	class="flex flex-row gap-x-0.5 text-shadow-sm items-center cursor-pointer"
+	class="flex flex-row gap-x-0.5 text-shadow-sm items-center cursor-pointer text-xl"
 	>{label}
 	<input class="invisible w-0" type="checkbox" {checked} />
 	<div class="border-4 border-black/50 rounded-xl">
 		<div
+			aria-checked={checked}
+			role="checkbox"
+			tabindex="0"
 			class={`${checked ? 'bg-checkbox-gradient-checked' : 'bg-checkbox-gradient'} ${
 				sizes[size]
 			} rounded-lg relative`}

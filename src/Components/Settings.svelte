@@ -1,13 +1,20 @@
 <script lang="ts">
-	import { settings } from '../Stores/settingsStore';
+	import { settings, type Settings } from '../Stores/settingsStore';
 	import Checkbox from './Checkbox.svelte';
+
+	const getEntries = (obj: Settings) => {
+		return Object.entries(obj).map(([name, setting]) => {
+			return [name, setting] as [keyof Settings, typeof setting];
+		});
+	};
 </script>
 
-<div class="text-xl flex flex-row gap-x-2">
-	<Checkbox
-		label="Starpower"
-		toggle={settings.toggleStarPowers}
-		checked={$settings.withStarPowers}
-	/>
-	<Checkbox label="Gadget" toggle={settings.toggleGadgets} checked={$settings.withGadgets} />
+<div class="flex flex-col gap-y-1 sm:flex-row gap-x-2">
+	{#each getEntries($settings) as [name, setting]}
+		<Checkbox
+			label={setting.label}
+			toggle={() => settings.toggle(name)}
+			checked={setting.checked}
+		/>
+	{/each}
 </div>

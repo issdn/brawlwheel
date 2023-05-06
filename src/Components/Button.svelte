@@ -1,13 +1,15 @@
 <script lang="ts">
 	const sizes = {
 		sm: 'py-1 px-4 text-sm',
-		md: 'py-2 px-8 text-lg',
-		lg: 'py-2 px-16 text-xl'
+		md: 'py-2 px-8 text-lg text-shadow-sm',
+		lg: 'py-2 px-16 text-2xl text-shadow-md',
+		none: ''
 	};
 
 	const colors = {
 		black: 'bg-gray-800 before:bg-gray-700 after:bg-gray-900',
-		orange: 'bg-orange-500 before:bg-orange-400 after:bg-orange-600'
+		orange: 'bg-orange-500 before:bg-orange-400 after:bg-orange-600',
+		clear: ''
 	};
 
 	export let onClick: () => void;

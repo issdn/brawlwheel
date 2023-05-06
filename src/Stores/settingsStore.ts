@@ -1,33 +1,26 @@
 import { writable } from 'svelte/store';
 
+export type Settings = {
+	[k: string]: { checked: boolean; label: string };
+};
+
 const createSettingsStore = () => {
-	const { subscribe, update } = writable({
-		withGadgets: true,
-		withStarPowers: true
+	const { subscribe, update } = writable<Settings>({
+		withGadgets: { checked: true, label: 'Gadgets' },
+		withStarPowers: { checked: true, label: 'Star Powers' },
+		allowUnavailibleEvents: { checked: false, label: 'Unavailible Events' }
 	});
 
-	const toggleGadgets = () => {
-		update((settings) => {
-			return {
-				...settings,
-				withGadgets: !settings.withGadgets
-			};
-		});
-	};
-
-	const toggleStarPowers = () => {
-		update((settings) => {
-			return {
-				...settings,
-				withStarPowers: !settings.withStarPowers
-			};
-		});
+	const toggle = (key: keyof Settings) => {
+		update((settings) => ({
+			...settings,
+			[key]: { ...settings[key], checked: !settings[key].checked }
+		}));
 	};
 
 	return {
 		subscribe,
-		toggleGadgets,
-		toggleStarPowers
+		toggle
 	};
 };
 

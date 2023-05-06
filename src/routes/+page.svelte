@@ -1,48 +1,54 @@
 <script lang="ts">
 	import BrawlerList from '../Components/BrawlerList.svelte';
 	import { getBrawlerNames } from '../Components/brawlersFunctions';
-	import { brawlinfo } from '../Components/brawlinfo';
+	import { brawlinfo, brawlevents } from '../Components/brawlinfo';
 	import DialogContainer from '../Components/DialogContainer.svelte';
 	import { brawlerStore, gadgetsAndStarPowersByBrawler } from '../Stores/brawlerStore';
 	import Settings from '../Components/Settings.svelte';
-	import Squads from '../Components/Squads.svelte';
 	import Wheel from '../Components/Wheel.svelte';
 	import ComponentTab from '../Components/ComponentTab.svelte';
+	import type { SvelteComponent } from 'svelte';
+	import { eventStore } from '../Stores/eventStore';
+	import Squads from '../Components/Squads.svelte';
+	import { settings } from '../Stores/settingsStore';
+	import { allBrawlEvents } from '../Components/allBrawlEvents';
 
-	const components = {
-		Squads: Squads,
-		Wheel: Wheel
+	type Components = {
+		[k: string]: { component: typeof SvelteComponent; props: { [k: string]: unknown } };
 	};
-	const componentLabels = Object.keys(components) as Array<keyof typeof components>;
 
-	$: activeComponent = componentLabels[0];
-
-	const setActiveComponent = (label: keyof typeof components) => {
-		activeComponent = label;
+	const setActiveComponent = (label: string) => {
+		currentLabel = label;
 	};
 
 	const brawlerNames = getBrawlerNames(brawlinfo.items);
 	brawlerStore.set(brawlerNames);
 
-	gadgetsAndStarPowersByBrawler.set(
-		brawlinfo.items.map((brawler) => {
-			return {
-				name: brawler.name,
-				gadgets: brawler.gadgets.map((gadget) => gadget.name),
-				starPowers: brawler.starPowers.map((starpower) => starpower.name)
-			};
-		})
-	);
+	$: $settings.allowUnavailibleEvents.checked
+		? eventStore.setFromStringArray(allBrawlEvents)
+		: eventStore.setFromEventArray(brawlevents);
+
+	gadgetsAndStarPowersByBrawler.set(brawlinfo.items);
+
+	const components = {
+		Slots: { component: Squads, props: {} },
+		Wheel: { component: Wheel, props: {} }
+	} as Components;
+
+	const componentLabels = Object.keys(components);
+
+	$: currentLabel = componentLabels[0];
+	$: activeComponent = components[currentLabel];
 </script>
 
 <main
-	class="p-4 md:p-12 gap-y-4 bg-secondary-gradient flex flex-col w-full lg:h-full overflow-hidden"
+	class="font-lilita text-white p-4 xl:p-12 gap-y-4 bg-secondary-gradient flex flex-col w-full min-h-screen md:h-full overflow-hidden"
 >
 	<div class="flex flex-row justify-center">
-		<ComponentTab {activeComponent} {componentLabels} {setActiveComponent} />
+		<ComponentTab {currentLabel} {componentLabels} {setActiveComponent} />
 	</div>
-	<div class="w-full h-full gap-y-12 flex flex-col md:flex-row gap-x-4">
-		<svelte:component this={components[activeComponent]} />
+	<div class="w-full h-full gap-y-12 flex flex-col lg:flex-row gap-x-4 xl:gap-x-12">
+		<svelte:component this={activeComponent.component} {...activeComponent.props} />
 		<div class="flex flex-col h-full w-full gap-y-2">
 			<Settings />
 			<BrawlerList {brawlerNames} />

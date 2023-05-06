@@ -39,8 +39,7 @@ export default class WheelRenderer {
 	private _words: string[];
 	private config: Config;
 	private ctx: CanvasRenderingContext2D;
-	private centerX: number;
-	private centerY: number;
+	private center: number;
 	private radius: number;
 	private numSegments: number;
 	private angleStep = 6;
@@ -57,22 +56,20 @@ export default class WheelRenderer {
 		this._words = words;
 		this.ctx = this.getContext();
 		this.numSegments = this._words.length;
-		this.centerX = this.canvas.width / 2;
-		this.centerY = this.canvas.height / 2;
-		this.radius = Math.min(this.centerX, this.centerY);
+		this.center = this.canvas.width / 2;
+		this.center = this.canvas.height / 2;
+		this.radius = Math.min(this.center, this.center);
 		this.fontStyle = `${this.config.fontWeight} ${24}px ${this.config.fontFamily}`;
 		this.config.fontBorderWidth = 1;
 		this.config.accentBorderWidth = 1;
 		this.calculateSizing();
-		this.resize();
-		this.preDraw();
 	}
 
 	set words(words: string[]) {
 		this._words = words;
 		this.numSegments = this._words.length;
 		this.calculateSizing();
-		this.preDraw();
+		this.drawWheel(0);
 	}
 
 	get words() {
@@ -81,12 +78,12 @@ export default class WheelRenderer {
 
 	public resize = () => {
 		this.calculateSizing();
-		this.preDraw();
+		this.drawWheel(0);
 	};
 
-	private preDraw() {
-		document.fonts.load(this.fontStyle).then(() => {
-			this.drawWheel(0);
+	public preDraw() {
+		return document.fonts.load(this.fontStyle).then(() => {
+			this.resize();
 		});
 	}
 
@@ -117,19 +114,14 @@ export default class WheelRenderer {
 		const containerWidth = container.offsetWidth;
 		const containerHeight = container.offsetHeight;
 		let size = Math.min(containerWidth, containerHeight);
-		if (size <= 0) {
-			size = Math.max(containerWidth, containerHeight);
-			container.style.height = container.style.width = size + 'px';
-			if (size <= 0) {
-				size = Math.min(window.innerHeight, window.innerWidth);
-				container.style.height = size + 'px';
-				container.style.width = size + 'px';
-			}
+		const mediaQuery = window.matchMedia(`(max-width: ${this.config.breakPoint}px)`);
+		if (mediaQuery.matches) {
+			size = containerWidth;
+			container.style.height = size + 'px';
 		}
 		this.canvas.width = this.canvas.height = size;
-		this.centerX = this.canvas.width / 2;
-		this.centerY = this.canvas.height / 2;
-		this.radius = Math.min(this.centerX, this.centerY);
+		this.center = this.canvas.width / 2;
+		this.radius = this.center - 10;
 		this.angleStep = (2 * Math.PI) / this.numSegments;
 		this.fontStyle = `${this.config.fontWeight} ${
 			this._words.length < 24 ? (this.radius / 24) * 2.5 : (this.radius / this._words.length) * 3
@@ -142,10 +134,10 @@ export default class WheelRenderer {
 		// Draw wheel
 		this.ctx.save();
 		this.ctx.beginPath();
-		this.ctx.moveTo(this.centerX, this.centerY);
+		this.ctx.moveTo(this.center, this.center);
 		this.ctx.arc(
-			this.centerX,
-			this.centerY,
+			this.center,
+			this.center,
 			this.radius,
 			index * this.angleStep - Math.PI / 2,
 			(index + 1) * this.angleStep - Math.PI / 2
@@ -158,7 +150,7 @@ export default class WheelRenderer {
 		this.ctx.restore();
 		// Draw text
 		this.ctx.save();
-		this.ctx.translate(this.centerX, this.centerY);
+		this.ctx.translate(this.center, this.center);
 		this.ctx.rotate((index + 0.5) * this.angleStep - Math.PI / 2);
 		this.ctx.font = this.fontStyle;
 		this.ctx.lineWidth = this.config.fontBorderWidth;
@@ -175,15 +167,15 @@ export default class WheelRenderer {
 		const innerCircleRadius = this.radius / 4;
 		this.ctx.save();
 		this.ctx.beginPath();
-		this.ctx.moveTo(this.centerX, this.centerY);
-		this.ctx.arc(this.centerX, this.centerY, innerCircleRadius, 0, 2 * Math.PI);
+		this.ctx.moveTo(this.center, this.center);
+		this.ctx.arc(this.center, this.center, innerCircleRadius, 0, 2 * Math.PI);
 		this.ctx.closePath();
 		this.ctx.fillStyle = this.config.accentColor;
 		this.ctx.fill();
 		this.ctx.restore();
 		// Draw SPIN text in the middle
 		this.ctx.save();
-		this.ctx.translate(this.centerX, this.centerY);
+		this.ctx.translate(this.center, this.center);
 		this.ctx.font = `${this.config.fontWeight} ${innerCircleRadius / 1.5}px ${
 			this.config.fontFamily
 		}`;
@@ -201,11 +193,11 @@ export default class WheelRenderer {
 		const arrowTip = 10;
 
 		this.ctx.beginPath();
-		this.ctx.moveTo(this.centerX - arrowWidth / 2, 0);
-		this.ctx.lineTo(this.centerX + arrowWidth / 2, 0);
-		this.ctx.lineTo(this.centerX + arrowWidth / 2, arrowHeight - arrowTip);
-		this.ctx.lineTo(this.centerX, arrowHeight);
-		this.ctx.lineTo(this.centerX - arrowWidth / 2, arrowHeight - arrowTip);
+		this.ctx.moveTo(this.center - arrowWidth / 2, 0);
+		this.ctx.lineTo(this.center + arrowWidth / 2, 0);
+		this.ctx.lineTo(this.center + arrowWidth / 2, arrowHeight - arrowTip);
+		this.ctx.lineTo(this.center, arrowHeight);
+		this.ctx.lineTo(this.center - arrowWidth / 2, arrowHeight - arrowTip);
 		this.ctx.closePath();
 
 		this.ctx.fillStyle = '#000';
@@ -247,15 +239,15 @@ export default class WheelRenderer {
 	private drawWheel(progress: number) {
 		const currentAngle = this.calculateCurrentAngle(progress);
 		this.ctx.save();
-		this.ctx.translate(this.centerX, this.centerY);
+		this.ctx.translate(this.center, this.center);
 		this.ctx.rotate(currentAngle);
-		this.ctx.translate(-this.centerX, -this.centerY);
+		this.ctx.translate(-this.center, -this.center);
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
 		if (this._words.length <= 0) {
 			this.ctx.beginPath();
-			this.ctx.moveTo(this.centerX, this.centerY);
-			this.ctx.arc(this.centerX, this.centerY, this.radius, 0, 2 * Math.PI);
+			this.ctx.moveTo(this.center, this.center);
+			this.ctx.arc(this.center, this.center, this.radius, 0, 2 * Math.PI);
 			this.ctx.closePath();
 			this.ctx.fillStyle = this.config.segmentColors[0];
 			this.ctx.fill();

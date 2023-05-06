@@ -5,12 +5,14 @@
 	import { isAnimating } from '../Stores/pageContextStore';
 	import { settings } from '../Stores/settingsStore';
 	import { dialogContext } from '../Stores/dialogStore';
+	import Spinner from './Spinner.svelte';
 
 	let canvasBinding: HTMLCanvasElement;
 	let error: string | null = null;
 	let wheelRenderer: WheelRenderer | null = null;
+	let wheelDrawn = false;
 
-	$: if (wheelRenderer) {
+	$: if (wheelRenderer && wheelDrawn) {
 		wheelRenderer.words = $brawlerStore;
 	}
 
@@ -21,12 +23,13 @@
 			}
 		}
 	};
+
 	const announceWinner = (winner: string) => {
 		try {
 			const brawlerObj = gadgetsAndStarPowersByBrawler.getRandomGadgetAndStarPower(
 				winner,
-				$settings.withGadgets,
-				$settings.withStarPowers
+				$settings.withGadgets.checked,
+				$settings.withStarPowers.checked
 			);
 			dialogContext.addDialog({ type: 'wheelWinner', data: brawlerObj });
 		} catch {
@@ -41,6 +44,9 @@
 					onAnimationStart: isAnimating.setTrue,
 					onAnimationEnd: isAnimating.setFalse,
 					announceWinner: announceWinner
+				});
+				wheelRenderer.preDraw().then(() => {
+					wheelDrawn = true;
 				});
 				var resize = wheelRenderer.resize;
 				window.addEventListener('resize', resize);
@@ -70,6 +76,11 @@
 			on:click={handleWheelClick}
 			class="absolute rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full z-[1]"
 		/>
+		{#if !wheelDrawn}
+			<div class="w-full h-full flex flex-col justify-center items-center">
+				<Spinner size="lg" />
+			</div>
+		{/if}
 		<canvas
 			class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 			bind:this={canvasBinding}

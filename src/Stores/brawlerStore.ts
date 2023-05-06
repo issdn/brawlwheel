@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import type { Brawlers } from '../Components/brawlersFunctions';
 
 type BrawlerName = string;
 export type BrawlerNames = BrawlerName[];
@@ -40,7 +41,19 @@ export type GadgetsAndStarPowersByBrawler = {
 export type GadgetsAndStarPowersByBrawlers = GadgetsAndStarPowersByBrawler[];
 
 const createGadgetsAndStarPowersByBrawlerStore = () => {
-	const { subscribe, set, update } = writable<GadgetsAndStarPowersByBrawlers>();
+	const { subscribe, set: _set, update } = writable<GadgetsAndStarPowersByBrawlers>();
+
+	const set = (brawlers: Brawlers) => {
+		_set(
+			brawlers.map((brawler) => {
+				return {
+					name: brawler.name,
+					gadgets: brawler.gadgets.map((gadget) => gadget.name),
+					starPowers: brawler.starPowers.map((starpower) => starpower.name)
+				};
+			})
+		);
+	};
 
 	let _brawlersList: GadgetsAndStarPowersByBrawlers;
 	const getRandomGadgetAndStarPower = (
