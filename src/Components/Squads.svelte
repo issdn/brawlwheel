@@ -34,10 +34,20 @@
 </script>
 
 <div class="flex flex-col gap-y-12 w-full h-full">
-	<Slot label="Brawlers" numberOfReels={3} possibilities={$brawlerStore} />
+	<Slot
+		disabled={!$brawlerStore.length}
+		label="Brawlers"
+		numberOfReels={3}
+		possibilities={$brawlerStore}
+	/>
 	{#if !events}
 		<Spinner size="lg" />
 	{:else}
-		<Slot label="Map" numberOfReels={1} possibilities={$eventStore} />
+		<Slot
+			disabled={!$eventStore.length}
+			label="Map"
+			numberOfReels={1}
+			possibilities={$eventStore}
+		/>
 	{/if}
 </div>

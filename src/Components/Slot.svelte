@@ -6,6 +6,7 @@
 	export let label: string;
 	export let numberOfReels = 3;
 	export let possibilities: string[];
+	export let disabled: boolean;
 
 	const _slots = slots(numberOfReels);
 </script>
@@ -18,7 +19,7 @@
 		>
 			<Button
 				size="lg"
-				attributes={{ disabled: !$_slots.every((reel) => reel.finished) }}
+				attributes={{ disabled: !$_slots.every((reel) => reel.finished) || disabled }}
 				onClick={_slots.spin}>Spin</Button
 			>
 		</div>

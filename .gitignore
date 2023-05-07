@@ -14,3 +14,4 @@ pnpm-lock.yaml
 .prettierrc
 .eslintignore
 .eslintrc.cjs
+.vercel/

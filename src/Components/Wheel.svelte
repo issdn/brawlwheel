@@ -18,7 +18,7 @@
 
 	const handleWheelClick = () => {
 		if (wheelRenderer) {
-			if (!$isAnimating) {
+			if (!$isAnimating && $brawlerStore.length) {
 				wheelRenderer.spin();
 			}
 		}
@@ -75,7 +75,7 @@
 					handleWheelClick();
 				}
 			}}
-			style={`cursor:${$isAnimating ? 'default' : 'pointer'};`}
+			style={`cursor:${$isAnimating || !$brawlerStore.length ? 'default' : 'pointer'};`}
 			on:click={handleWheelClick}
 			class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 			bind:this={canvasBinding}
