@@ -66,7 +66,10 @@
 	<span>{error}</span>
 {:else}
 	<div id="wheelCanvasContainer" class="relative h-full w-full">
-		<div
+		{#if !wheelDrawn}
+			<Spinner size="lg" />
+		{/if}
+		<canvas
 			on:keydown={(e) => {
 				if (e.key === 'Space') {
 					handleWheelClick();
@@ -74,14 +77,6 @@
 			}}
 			style={`cursor:${$isAnimating ? 'default' : 'pointer'};`}
 			on:click={handleWheelClick}
-			class="absolute rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full z-[1]"
-		/>
-		{#if !wheelDrawn}
-			<div class="w-full h-full flex flex-col justify-center items-center">
-				<Spinner size="lg" />
-			</div>
-		{/if}
-		<canvas
 			class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 			bind:this={canvasBinding}
 		/>

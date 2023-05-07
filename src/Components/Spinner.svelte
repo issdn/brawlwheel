@@ -8,6 +8,8 @@
 	export let style = '';
 </script>
 
-<span
-	class={`${sizes[size]} ${style} rounded-full border-b-gray-900/70 border-gray-900/25 inline-block box-border animate-spin`}
-/>
+<div class="w-full h-full flex flex-row justify-center items-center">
+	<span
+		class={`${sizes[size]} ${style} rounded-full border-b-gray-900/70 border-gray-900/25 inline-block box-border animate-spin`}
+	/>
+</div>

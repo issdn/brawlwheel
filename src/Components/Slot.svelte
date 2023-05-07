@@ -12,7 +12,7 @@
 
 <div class="flex flex-col">
 	<span class="w-full bg-black uppercase default-text px-8 py-1">{label}</span>
-	<fieldset class="border-2 border-black py-8 relative">
+	<div class="border-2 border-black py-8 relative">
 		<div
 			class="w-full flex flex-row justify-center absolute -bottom-0 translate-y-1/2 left-1/2 -translate-x-1/2"
 		>
@@ -25,7 +25,7 @@
 		<table class="gap-x-2 w-full table-fixed">
 			<tr>
 				{#each $_slots as _, i}
-					<td class="text-center">
+					<td class="text-center [&:not(:last-child)]:border-r-2 border-black">
 						<Reel
 							setFinishedTrue={() => _slots.setFinishedTrue(i)}
 							setSpinFunction={(spin) => _slots.setSpinFunction(spin, i)}
@@ -35,5 +35,5 @@
 				{/each}
 			</tr>
 		</table>
-	</fieldset>
+	</div>
 </div>

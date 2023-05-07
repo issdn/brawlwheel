@@ -17,4 +17,5 @@
 			{label}
 		</Button>
 	{/each}
+	<slot />
 </div>

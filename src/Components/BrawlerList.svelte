@@ -4,37 +4,31 @@
 	import Button from './Button.svelte';
 	import Icon from './Icon.svelte';
 
-	let widestName = 100;
-
-	export let hidden = false;
 	export let brawlerNames: BrawlerNames;
-	const setNameWidth = (width: number) => {
-		if (width > widestName) {
-			widestName = width;
+	export let style = '';
+
+	let reverse = false;
+	const sortAlphabetically = () => {
+		if (reverse) {
+			brawlerNames = brawlerNames.sort((a, b) => b.localeCompare(a));
+			reverse = false;
+		} else {
+			brawlerNames = brawlerNames.sort((a, b) => a.localeCompare(b));
+			reverse = true;
 		}
 	};
 </script>
 
-<div class="h-full w-full flex flex-col items-center border-2 border-black">
-	<div class="bg-black w-full px-2 md:px-8 flex flex-row justify-between">
-		<span>Click on brawler's name to remove it from the wheel.</span>
-		<Button size="none" color="clear" onClick={() => (hidden = !hidden)}
-			><Icon
-				style={`${hidden ? 'rotate-180' : 'rotate-0'} text-xl align-middle`}
-				icon="expand_more"
-			/></Button
-		>
+<div class={`${style} overflow-y-auto overflow-x-hidden h-full p-4 `}>
+	<div>
+		<Button onClick={sortAlphabetically} style="bg-gray-900" color="black" size="square">
+			<Icon icon="sort_by_alpha" />
+		</Button>
 	</div>
-	<ul
-		style={`grid-template-columns: repeat(auto-fit, minmax(${widestName.toFixed()}px, 1fr));`}
-		class={`${
-			hidden ? 'hidden' : 'grid'
-		} text-xl h-full w-full gap-x-4 overflow-y-auto overflow-x-hidden p-8`}
-	>
+	<ul class={`text-xl h-full gap-x-4 grid grid-cols-1 sm:grid-cols-3 w-fit mt-2`}>
 		{#each brawlerNames as brawlerName}
 			<li>
 				<BrawlerName
-					{setNameWidth}
 					removeBrawler={brawlerStore.removeWord}
 					addBrawler={brawlerStore.addWord}
 					name={brawlerName}

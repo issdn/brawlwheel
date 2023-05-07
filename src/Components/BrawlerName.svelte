@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { isAnimating } from '../Stores/pageContextStore';
 
 	type name = string;
@@ -9,9 +8,7 @@
 	export let name: name;
 	export let addBrawler: addBrawler;
 	export let removeBrawler: removeBrawler;
-	export let setNameWidth: (width: number) => void;
 
-	let textWidthBinding: HTMLButtonElement;
 	let active = true;
 
 	const handleBrawlerNameClick = () => {
@@ -26,18 +23,12 @@
 			active = true;
 		}
 	};
-
-	onMount(() => {
-		const width = textWidthBinding.getBoundingClientRect().width;
-		setNameWidth(width);
-	});
 </script>
 
 <button
 	disabled={$isAnimating}
 	class={`${$isAnimating && 'cursor-default'} ${
 		!active ? 'opacity-25' : $isAnimating ? 'opacity-75' : 'opacity-100'
-	}`}
-	bind:this={textWidthBinding}
+	} text-2xl xl:text-3xl`}
 	on:click={handleBrawlerNameClick}>{name}</button
 >

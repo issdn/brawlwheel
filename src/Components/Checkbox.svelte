@@ -21,10 +21,10 @@
 			toggle();
 		}
 	}}
-	class="flex flex-row gap-x-0.5 text-shadow-sm items-center cursor-pointer text-xl"
+	class="flex flex-row gap-x-0.5 text-shadow-sm items-center cursor-pointer sm:text-xl"
 	>{label}
 	<input class="invisible w-0" type="checkbox" {checked} />
-	<div class="border-4 border-black/50 rounded-xl">
+	<div class="border-4 border-gray-600/50 rounded-xl hover:scale-105">
 		<div
 			aria-checked={checked}
 			role="checkbox"

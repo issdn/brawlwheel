@@ -61,7 +61,7 @@
 	});
 </script>
 
-<div class="relative min-h-[5.80rem] flex flex-col">
+<div class="relative min-h-[5.80rem] flex flex-col justify-center">
 	{#if possibilities}
 		{#key current}
 			<span class="md:text-3xl uppercase" in:slide out:slide|local>

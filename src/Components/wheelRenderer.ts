@@ -2,7 +2,7 @@ type Config = {
 	fontWeight: number;
 	segmentColors: string[];
 	textColor: string;
-	textBorderColor: string;
+	fontBorderColor: string;
 	fontFamily: string;
 	accentColor: string;
 	duration: number;
@@ -22,7 +22,7 @@ const configBase = {
 	fontWeight: 900,
 	segmentColors: ['#ff9801', '#ffcc01'],
 	textColor: 'white',
-	textBorderColor: 'black',
+	fontBorderColor: 'black',
 	fontFamily: 'Lilita',
 	accentColor: 'black',
 	duration: 5000,
@@ -49,6 +49,8 @@ export default class WheelRenderer {
 	private lastSegmentAngle = 0;
 	private finalSegmentAngle = 0;
 	private winnerIndex = 0;
+	private textColor: string;
+	private fontBorderWidth: number;
 
 	constructor(canvas: HTMLCanvasElement, words: string[], config: ConfigType = {}) {
 		this.config = { ...configBase, ...config };
@@ -62,6 +64,8 @@ export default class WheelRenderer {
 		this.fontStyle = `${this.config.fontWeight} ${24}px ${this.config.fontFamily}`;
 		this.config.fontBorderWidth = 1;
 		this.config.accentBorderWidth = 1;
+		this.textColor = this.config.textColor;
+		this.fontBorderWidth = this.config.fontBorderWidth;
 		this.calculateSizing();
 	}
 
@@ -113,21 +117,27 @@ export default class WheelRenderer {
 		}
 		const containerWidth = container.offsetWidth;
 		const containerHeight = container.offsetHeight;
-		let size = Math.min(containerWidth, containerHeight);
-		const mediaQuery = window.matchMedia(`(max-width: ${this.config.breakPoint}px)`);
-		if (mediaQuery.matches) {
-			size = containerWidth;
-			container.style.height = size + 'px';
+		if (window.innerWidth < window.innerHeight - 100) {
+			container.style.setProperty('height', `${containerWidth}px`);
+			this.canvas.width = this.canvas.height = containerWidth;
+		} else {
+			this.canvas.width = this.canvas.height = Math.min(containerWidth, containerHeight);
 		}
-		this.canvas.width = this.canvas.height = size;
 		this.center = this.canvas.width / 2;
 		this.radius = this.center - 10;
 		this.angleStep = (2 * Math.PI) / this.numSegments;
-		this.fontStyle = `${this.config.fontWeight} ${
-			this._words.length < 24 ? (this.radius / 24) * 2.5 : (this.radius / this._words.length) * 3
-		}px ${this.config.fontFamily}`;
+		const fontSize =
+			this._words.length < 24 ? (this.radius / 24) * 2.5 : (this.radius / this._words.length) * 3;
+		if (this._words.length > this.canvas.width / 10) {
+			this.fontStyle = `300 ${fontSize}px Helvetica`;
+			this.textColor = this.config.fontBorderColor;
+			this.fontBorderWidth = 0.01;
+		} else {
+			this.fontStyle = `${this.config.fontWeight} ${fontSize}px ${this.config.fontFamily}`;
+			this.textColor = this.config.textColor;
+			this.fontBorderWidth = this.config.fontBorderWidth;
+		}
 		this.config.accentBorderWidth = this.canvas.width < this.config.breakPoint ? 1 : 4;
-		this.config.fontBorderWidth = 1;
 	}
 
 	private drawSegment(word: string, index: number) {
@@ -153,9 +163,9 @@ export default class WheelRenderer {
 		this.ctx.translate(this.center, this.center);
 		this.ctx.rotate((index + 0.5) * this.angleStep - Math.PI / 2);
 		this.ctx.font = this.fontStyle;
-		this.ctx.lineWidth = this.config.fontBorderWidth;
-		this.ctx.strokeStyle = this.config.textBorderColor;
-		this.ctx.fillStyle = this.config.textColor;
+		this.ctx.lineWidth = this.fontBorderWidth;
+		this.ctx.strokeStyle = this.config.fontBorderColor;
+		this.ctx.fillStyle = this.textColor;
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'middle';
 		this.ctx.fillText(word, this.radius - this.ctx.measureText(word).width / 2 - 10, 0);

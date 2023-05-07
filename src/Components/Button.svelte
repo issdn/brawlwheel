@@ -3,6 +3,7 @@
 		sm: 'py-1 px-4 text-sm',
 		md: 'py-2 px-8 text-lg text-shadow-sm',
 		lg: 'py-2 px-16 text-2xl text-shadow-md',
+		square: 'py-2 px-2 text-lg flex flex-row justify-center items-center',
 		none: ''
 	};
 
@@ -23,7 +24,7 @@
 	class={`${style} ${sizes[size]} ${colors[color]} block default-text
 		relative before:w-full before:absolute before:top-0 before:left-0 before:h-1
 		after:w-full after:absolute after:bottom-0 after:right-0 after:h-1 
-		border-b-2 border-black hover:border-none box-border hover:mb-0.5`}
+		box-border enabled:hover:scale-105 transition-transform duration-200 `}
 	on:click={onClick}
 	{...attributes}
 >
