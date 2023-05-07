@@ -14,7 +14,8 @@ export const GET = async () => {
 				error: data.message,
 				reason: data.reason,
 				detail: data.detail
-			})
+			}),
+			{ status: 400 }
 		);
 	} else {
 		return new Response(JSON.stringify({ events: data }));

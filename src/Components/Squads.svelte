@@ -13,6 +13,7 @@
 	const fetchMaps = async () => {
 		const response = await fetch('/events');
 		const data = await response.json();
+		console.log(response);
 		if (response.ok) {
 			events = data.events;
 		} else {
@@ -40,7 +41,7 @@
 		numberOfReels={3}
 		possibilities={$brawlerStore}
 	/>
-	{#if !events}
+	{#if !events && !$eventStore.length}
 		<Spinner size="lg" />
 	{:else}
 		<Slot
